@@ -191,32 +191,6 @@ int  gestionaError(sqlite3 *db){
 	fprintf(stderr,"Error:%s\n",sqlite3_errmsg(db));
 	return sqlite3_errcode(db);
 }
-void insertDataL(struct Evento *e,sqlite3 *db, char date [], int num){
-        char sql[250];
-        int rc;
-
-//	printf("AL ingresar a la base de datos:\n\n");
-
-
-/*	printf("dateEvent:%s\n",date);
-	printf("host:%s\n",e->host);
-	printf("EvenType:%s\n",e->evenType);
-	printf("client:%s\n",e->client);
-  */
-  	char * err_msg;
-                sprintf(sql,"INSERT INTO event(date,nProcess,host,evenType,customer) values('%s','%s','%s','%s','%s');",date,e->process,e->host,e->evenType,e->client);
-        
-
-	 rc = sqlite3_exec(db,sql,NULL,NULL,NULL);
-
-        if(rc != SQLITE_OK){
-    	  gestionaError(db);
-		//fprintf(stderr, "SQL Error %s%d\n",err_msg,num);
-                //sqlite3_free(err_msg);
-                //sqlite3_close(db);
-        }
-	
-}
 
 
 void insertData(struct Evento *e,sqlite3 *db, char dateEvent [], int num){
@@ -225,7 +199,7 @@ void insertData(struct Evento *e,sqlite3 *db, char dateEvent [], int num){
 	char * err_msg = 0;
 	
 	if(num == 1){
-		sprintf(sql,"INSERT INTO event(date,nProcess,host,evenType,customer) values('%s','%s','%s','%s','%s');",dateEvent,e->process,e->host,e->evenType,e->client);
+		sprintf(sql,"INSERT INTO eventLogin(date,nProcess,host,evenType,customer) values('%s','%s','%s','%s','%s');",dateEvent,e->process,e->host,e->evenType,e->client);
 		
 	}
 	if(num == 3){
@@ -323,6 +297,8 @@ printf("</html>");
                 return 1;
     }
 
+    
+
     char * sql = "DROP TABLE IF EXISTS event;"
                       "CREATE TABLE event(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,date TEXT,nProcess TEXT, host TEXT,evenType TEXT,customer TEXT,pathFile TEXT,file TEXT, size INTEGER, time TEXT);";
 
@@ -333,6 +309,18 @@ printf("</html>");
 	sqlite3_free(err_msg);
 	sqlite3_close(db);
 	return 1;
+    }
+
+      sql = "DROP TABLE IF EXISTS eventLogin;"
+                      "CREATE TABLE eventLogin(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,date TEXT,nProcess TEXT, host TEXT,evenType TEXT,customer TEXT);";
+
+    rc = sqlite3_exec(db,sql,0,0,&err_msg);
+
+    if(rc != SQLITE_OK){
+        fprintf(stderr,"SQL error%s\n",err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        return 1;
     }
 
 
