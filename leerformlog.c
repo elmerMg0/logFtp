@@ -96,7 +96,29 @@ int execQuery(sqlite3 * db, int query, char * startDate, char * endDate,char * e
 		printf("</table>");
 		return 0;
 	}
-	
+
+	if(query == 5){
+		if(strcmp(event,"ALL") == 0){
+//                     select count(*), customer from event where evenType != 'FAILDOWNLOAD' and evenType != 'FAILUPLOAD' and date > '2022-05-06' and date < '2022-05-30 'group by customer
+                	sprintf(sql,"select count(*) , customer from event where date > '%s' and date < '%s' and  evenType != 'FAILDOWNLOAD' and evenType != 'FAILUPLOAD' group by customer",startDate,endDate );
+		}else{
+
+                   sprintf(sql,"select count(*), customer from event where evenType != 'FAILDOWNLOAD' and evenType != 'FAILUPLOAD' and date > '%s' and date < '%s' and evenType = '%s' group by customer",startDate,endDate,event);
+
+                }
+
+                printf("<h2>Cantidad de archivos/Cliente</h2>");
+                printf("<table style = \"width: 200px\">");
+                printf("<tr>");
+                printf("<th>Cantidad archivos</th>");
+                printf("<th>Cliente</th>");
+                printf("</tr>");
+                rc = sqlite3_exec(db,sql,callback,NULL,NULL);
+                printf("</table>");
+                return 0;
+	}
+
+
 	 if(query == 6){
                 if(strcmp(event,"ALL") == 0){
                         sprintf(sql,"select count(*),file  from event where file != 'NULL' and date > '%s' and date < '%s' group by file order by count(*) desc;",startDate,endDate);
@@ -150,6 +172,7 @@ int execQuery(sqlite3 * db, int query, char * startDate, char * endDate,char * e
 	}
 	printf("</table>");
 	}
+	return 0;
 }
 void separar(char *cadena, char *linea, char separador)
 {
@@ -295,13 +318,17 @@ int main(void)
 	}
 	
     	//Ejecutar consultas selecionadas
-	if(query1[0] != '\0')execQuery(db,1,startDate,endDate,event);
-       	if(query2[0] != '\0')execQuery(db,2,startDate,endDate,event);
-       	if(query3[0] != '\0')execQuery(db,3,startDate,endDate,event);
-	if(query4[0] != '\0')execQuery(db,4,startDate,endDate,event);
-	if(query5[0] != '\0')execQuery(db,5,startDate,endDate,event);
-	if(query6[0] != '\0')execQuery(db,6,startDate,endDate,event);
 
+	if(strcmp(event,"LOGIN") != 0){
+		if(strcmp(event,"FAILLOGIN") != 0){
+		if(query1[0] != '\0')execQuery(db,1,startDate,endDate,event);
+		if(query2[0] != '\0')execQuery(db,2,startDate,endDate,event);
+       		if(query3[0] != '\0')execQuery(db,3,startDate,endDate,event);
+		if(query4[0] != '\0')execQuery(db,4,startDate,endDate,event);
+		if(query5[0] != '\0')execQuery(db,5,startDate,endDate,event);
+		if(query6[0] != '\0')execQuery(db,6,startDate,endDate,event);
+		}
+	}
 	printf("</body>");
 
 

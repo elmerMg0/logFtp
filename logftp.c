@@ -270,7 +270,7 @@ printf("                <input name =\"query2\" type =\"checkbox\">Archivos mayo
 printf("                <input name =\"query3\" type =\"checkbox\">Velocidad promedio de transferencia</input><br>");
 printf("                <input name =\"query4\" type =\"checkbox\">Listar clientes</input><br>");
 printf("                <input name =\"query6\" type =\"checkbox\">Frecuencia de archivos</input><br>");
-printf("                <input name =\"query5\" type =\"checkbox\">Listar hosts</input><br>");
+printf("                <input name =\"query5\" type =\"checkbox\">Cantidad de archivos/cliente</input><br>");
 printf("            </div>");
 printf("        </div>");
 printf("     <INPUT  TYPE=\"SUBMIT\" VALUE=\"Send\"  style=\"margin-bottom:10px;border-radius:4px;text-decoration:none;border:none;font-si");printf("ze:16px;padding: 5px 12px; \">");
