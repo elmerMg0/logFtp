@@ -28,6 +28,23 @@ int callback3(void * arg, int numberCOlumns, char ** value, char ** columName){
 int execQuery(sqlite3 * db, int query, char * startDate, char * endDate,char * event){
 	char sql[200];
 	int rc;
+	if(strcmp(event,"LOGIN") == 0 || strcmp(event,"FAILLOGIN") == 0){
+		sprintf(sql,"select * from eventLogin where date > '%s' and date < '%s' and evenType = '%s'  ;",startDate, endDate, event);
+		printf("<table>");
+		printf("<tr>");
+		printf("<th>Id</th>");
+		printf("<th>Fecha</th>");
+		printf("<th>Pid</th>");
+		printf("<th>Host</th>");
+		printf("<th>Evento</th>");
+		printf("<th>Cliente</th>");
+		printf("</tr>");
+		rc = sqlite3_exec(db,sql,callback,NULL,NULL);
+		printf("</table>");
+		return 0;
+	}else{
+
+
 	if(query == 1){
                 if(strcmp(event,"ALL") == 0){
                         sprintf(sql,"select count(*)  from event where pathFile != 'NULL' and date > '%s' and date < '%s';",startDate,endDate);
@@ -132,6 +149,7 @@ int execQuery(sqlite3 * db, int query, char * startDate, char * endDate,char * e
 		printf("Error2%s",sqlite3_errmsg(db));
 	}
 	printf("</table>");
+	}
 }
 void separar(char *cadena, char *linea, char separador)
 {
