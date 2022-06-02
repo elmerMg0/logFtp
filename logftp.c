@@ -43,6 +43,16 @@ void showEvents(struct Evento *event,int i,char date[]){
 }
 
 
+void putValueDayNum(struct Evento *event,char str []){
+	int num = atoi(str);
+	memset(event->dayNum,0,10);
+	if(num < 10){
+		strcat(event->dayNum,"0");
+	}
+	strcat(event->dayNum,str);
+}
+
+
  bool putValueProcess(struct Evento *event,char str []){
      int i = 0;
      if(str[0] != '['){
@@ -284,7 +294,7 @@ printf("</html>");
 
 	struct Evento event;
     FILE * file = fopen("/var/log/vsftpd.log","r");
-    //FILE * file = fopen("e3.txt","r");
+    //FILE * file = fopen("unalinea.txt","r");
     char character;
     char *err_msg = 0;
     if(file == NULL){
@@ -371,11 +381,13 @@ printf("</html>");
                 strcat(str,cad);
             
             }else if(valid){
-                switch (col){
+   		if(str[0] != '\0'){
+      		switch (col){
                 case 0: memset(event.day,0,10);strcat(event.day,str) ;break;
                 case 1: memset(event.month,0,10);strcat(event.month,str) ;break;
-                case 2: memset(event.dayNum,0,10);strcat(event.dayNum,str) ;break;
-                case 4: memset(event.year,0,10);strcat(event.year,str) ;break;
+                //case 2: memset(event.dayNum,0,10);strcat(event.dayNum,str) ;break;
+		case 2: putValueDayNum(&event,str); break; 
+		case 4: memset(event.year,0,10);strcat(event.year,str) ;break;
                 case 6: valid = putValueProcess(&event,str) ;break;
                 case 7: valid = putValueHost(&event,str) ;break;
                 case 8: fail = verifyFail(str) ;break; //fail/ok
@@ -384,12 +396,13 @@ printf("</html>");
                 case 11: putValueClient(&event,str);break;
                 case 12: putValuePath(&event,str);break;
                 case 13: memset(event.size,0,20);strcat(event.size,str);break;
-            
-                }
+            		}
+                
                 col++;
 		//printf("Str: %s\n",str);
 		memset(str,0,100);
-            }
+            	}
+		}
         
     }   }
    
